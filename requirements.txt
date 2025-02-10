@@ -1,0 +1,9 @@
+requests
+beautifulsoup4
+anthropic
+python-dotenv
+openai
+python-pptx
+pydub
+audioop-lts
+moviepy
