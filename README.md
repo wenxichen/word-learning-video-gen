@@ -29,3 +29,4 @@ Finally, the videos are grouped together into serveral longer videos.
 
 - [ ] minimize the cost of LLM calls, especially for image generation. We can use cheaper alternatives for dall-e or local models. Alternatively, we can search for images on the internet.
 - [ ] make better command line interface for the script.
+- [ ] add more smooth support for different OS.

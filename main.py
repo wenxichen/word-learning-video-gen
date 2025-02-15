@@ -185,7 +185,10 @@ def convert_slide_to_image(slide_path: str) -> str:
     pdf_path = cache_dir + "temp.pdf"
 
     # Convert PPTX to PDF using LibreOffice
-    subprocess.run(["/Applications/LibreOffice.app/Contents/MacOS/soffice", "--headless", "--convert-to", "pdf", slide_path, "--outdir", cache_dir], check=True)
+    # TODO: check the os and use the correct path
+    # MAC: /Applications/LibreOffice.app/Contents/MacOS/soffice
+    # LINUX: soffice
+    subprocess.run(["soffice", "--headless", "--convert-to", "pdf", slide_path, "--outdir", cache_dir], check=True)
 
     # Convert PDF to PNG images using pdftoppm (part of poppler-utils)
     subprocess.run(["pdftoppm", "-png", "-singlefile", pdf_path, cache_dir + "temp"], check=True)
@@ -342,24 +345,24 @@ def combine_videos_from_cache_files(video_ids: List[str], output_path: str):
 
 
 if __name__ == "__main__":
-    # # count is used for counting and skipping
-    # count = 22
-    # videos_to_include = ["21", "22"] 
-    # video_paths = []
-    # for video_to_include in videos_to_include:
-    #     for file_path in os.listdir(cache_dir):
-    #         file_abs_path = cache_dir + file_path
-    #         if os.path.isfile(file_abs_path) and file_path.startswith(video_to_include+'_'):
-    #             video_paths.append(file_abs_path)
+    # count is used for counting and skipping
+    count = 0
+    videos_to_include = [] 
+    video_paths = []
+    for video_to_include in videos_to_include:
+        for file_path in os.listdir(cache_dir):
+            file_abs_path = cache_dir + file_path
+            if os.path.isfile(file_abs_path) and file_path.startswith(video_to_include+'_'):
+                video_paths.append(file_abs_path)
 
-    # for i, word in enumerate(tqdm(word_list[count:100])):
-    #     video_path = cache_dir + f"{count+1:02d}_" + word + ".mp4"
-    #     success = generate_video_for_word(word, video_path)
-    #     count += 1
-    #     if success:
-    #         video_paths.append(video_path)
-    #     if count % 10 == 0:
-    #         combine_videos(video_paths, output_dir + f"combined_{count-9}-{count}.mp4")
-    #         video_paths = []
+    for i, word in enumerate(tqdm(word_list[count:10])):
+        video_path = cache_dir + f"{count+1:02d}_" + word + ".mp4"
+        success = generate_video_for_word(word, video_path)
+        count += 1
+        if success:
+            video_paths.append(video_path)
+        if count % 10 == 0:
+            combine_videos(video_paths, output_dir + f"combined_{count-9}-{count}.mp4")
+            video_paths = []
 
-    combine_videos_from_cache_files(["11", "12", "13", "14", "15", "16", "17", "18", "19", "20"], output_dir + "combined_11-20.mp4")
+    # combine_videos_from_cache_files(["11", "12", "13", "14", "15", "16", "17", "18", "19", "20"], output_dir + "combined_11-20.mp4")
