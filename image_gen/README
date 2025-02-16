@@ -1,6 +1,6 @@
 # Image Generation
 
-This folder contains the code for generating images for the videos.
+This folder contains the code for generating images locally using flux.1-dev model for the videos.
 
 ## setup
 

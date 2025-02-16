@@ -13,6 +13,8 @@ pip install -r requirements.txt
 
 Install LibreOffice, poppler and ffmpeg for your OS if they are not installed.
 
+Install the image_gen requirements in the image_gen folder, if you want to generate images locally. Currently, the script uses flux.1-dev model to generate images.
+
 ## Usage
 
 Put your API keys in the `.env` file. List the words you want to generate videos for in the `materials/` folder.
@@ -33,6 +35,6 @@ Finally, the videos are grouped together into serveral longer videos.
 
 ## Future work
 
-- [ ] minimize the cost of LLM calls, especially for image generation. We can use cheaper alternatives for dall-e or local models. Alternatively, we can search for images on the internet.
+- [x] minimize the cost of LLM calls, especially for image generation. We can use cheaper alternatives for dall-e or local models. Alternatively, we can search for images on the internet.
 - [ ] make better command line interface for the script.
 - [ ] add more smooth support for different OS.
