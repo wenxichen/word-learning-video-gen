@@ -13,7 +13,7 @@ pip install -r requirements.txt
 
 Install LibreOffice, poppler and ffmpeg for your OS if they are not installed.
 
-Install the image_gen requirements in the image_gen folder, if you want to generate images locally. Currently, the script uses flux.1-dev model to generate images.
+Install the image_gen requirements in the `image_gen/` folder, if you want to generate images locally. Currently, the script uses flux.1-dev model to generate images.
 
 ## Usage
 
