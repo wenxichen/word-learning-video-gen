@@ -7,6 +7,8 @@ Generator of videos that teach kindergartener and first grader common words.
 pip install -r requirements.txt
 ```
 
+Install LibreOffice, poppler and ffmpeg for your OS if they are not installed.
+
 ## Usage
 
 Put your API keys in the `.env` file. List the words you want to generate videos for in the `materials/` folder.

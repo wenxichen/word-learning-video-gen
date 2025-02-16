@@ -1,0 +1,9 @@
+# Image Generation
+
+This folder contains the code for generating images for the videos.
+
+## setup
+
+```bash
+pip install -r requirements.txt
+```

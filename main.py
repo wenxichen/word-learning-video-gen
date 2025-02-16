@@ -14,6 +14,8 @@ from moviepy.editor import ImageClip, AudioFileClip, concatenate_videoclips, Vid
 import logging
 from tqdm import tqdm
 
+from image_gen.image_gen import generate_image
+
 load_dotenv()
 
 # # Configure logging
@@ -92,13 +94,13 @@ def generate_word_info(word: str) -> Dict[str, str]:
         return None
 
 
-def generate_image_from_word_info(word_info: Dict[str, str]) -> BytesIO:
+def generate_image_from_word_info(word_info: Dict[str, str], generator: str = "flux.1-dev") -> BytesIO:
     """
     Generate an image from a given word's definition and example sentence.
 
     Args:
         word_info (Dict[str, str]): A dictionary containing the word's definition and example sentence under the keys 'definition' and 'example'.
-
+        generator (str): The generator to use to generate the image. It can be "flux.1-dev" or "dall-e-3".
     Returns:
         BytesIO: A BytesIO object containing the generated image.
     """
@@ -108,17 +110,50 @@ def generate_image_from_word_info(word_info: Dict[str, str]) -> BytesIO:
         f"The example of the word is: \"{word_info['example']}\"."
     )
 
-    response = openai_client.images.generate(
-        model="dall-e-3",
-        prompt=image_prompt,
-        size="1024x1024",
-        quality="standard",
-        n=1,
-        # response_format="b64_json",
+    if generator == "flux.1-dev":
+        response = openai_client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": (f"You are a prompt engineer. I want you to convert and expand a prompt "
+                                     f"for use in text to image generation services which are based on Google T5 encoder and Flux model. "
+                                     f"Convert following prompt to natural language, creating an expanded and detailed prompt "
+                                     f"with detailed descriptions of subjects, scene and image quality while keeping the same key points. "
+                                     f"The final output should combine all these elements into a cohesive, detailed prompt "
+                                     f"that accurately reflects the image and should be converted into single paragraph "
+                                     f"to give the best possible result. "
+                                     f"\n\nThe prompt is: \"{image_prompt}\"")
+                        }
+                    ]
+                }
+            ],
+            response_format={
+                "type": "text"
+            },
+            temperature=0,
+            max_completion_tokens=512,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0
+        )
+        expanded_prompt = response.choices[0].message.content
+        print("Expanded image prompt: " + expanded_prompt)
+        image_data = generate_image(expanded_prompt)
+    else:
+        response = openai_client.images.generate(
+            model="dall-e-3",
+            prompt=image_prompt,
+            size="1024x1024",
+            quality="standard",
+            n=1,
+            # response_format="b64_json",
     )
-
-    image_url_response = requests.get(response.data[0].url)
-    image_data = BytesIO(image_url_response.content)
+        image_url_response = requests.get(response.data[0].url)
+        image_data = BytesIO(image_url_response.content)
 
     return image_data
 
@@ -346,7 +381,7 @@ def combine_videos_from_cache_files(video_ids: List[str], output_path: str):
 
 if __name__ == "__main__":
     # count is used for counting and skipping
-    count = 0
+    count = 10
     videos_to_include = [] 
     video_paths = []
     for video_to_include in videos_to_include:
@@ -355,7 +390,7 @@ if __name__ == "__main__":
             if os.path.isfile(file_abs_path) and file_path.startswith(video_to_include+'_'):
                 video_paths.append(file_abs_path)
 
-    for i, word in enumerate(tqdm(word_list[count:10])):
+    for i, word in enumerate(tqdm(word_list[count:20])):
         video_path = cache_dir + f"{count+1:02d}_" + word + ".mp4"
         success = generate_video_for_word(word, video_path)
         count += 1
