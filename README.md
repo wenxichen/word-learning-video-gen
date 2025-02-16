@@ -3,6 +3,8 @@ Generator of videos that teach kindergartener and first grader common words.
 
 ![Example of a generated slide of the word "accomplish"](accomplish_example.png)
 
+Here is a example of a generated video: [https://youtu.be/V_1OoPgL3hA?si=kyboJTq-s-bZ5OkS](https://youtu.be/V_1OoPgL3hA?si=kyboJTq-s-bZ5OkS)
+
 ## Setup
 
 ```bash

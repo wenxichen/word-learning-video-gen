@@ -7,3 +7,5 @@ This folder contains the code for generating images for the videos.
 ```bash
 pip install -r requirements.txt
 ```
+
+Make sure you have the flux.1-dev model downloaded.
